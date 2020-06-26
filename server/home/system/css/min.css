@@ -1,0 +1,25 @@
+h1{
+    font-size:30px;
+    color:#930;
+    text-align:center;
+}
+#ruler_table{
+    position: absolute;
+    top:350px;
+    left:100px;
+    width: 700px;
+}
+p.desc{
+    color:black;
+    font-size: 15px;
+}
+p.desc span{
+    font-size: 20px;
+    color: red;
+}
+#htwo{
+    position: absolute;
+    top:600px;
+    left:690px;
+    text-align: center;
+}

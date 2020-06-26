@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>MySQL数据库审计系统</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="homepage/image/icon.png">
+
+        <link href="./homepage/css/index.css" rel="stylesheet">
+        <link href="./homepage/css/page_top.css" rel="stylesheet">
+        <!--脚本-->
+        <script type="text/javascript">
+        	function  getDate01(){
+                  var time = new Date();
+                  var myYear = time.getFullYear();
+                  var myMonth = time.getMonth()+1;
+                  var myDay = time.getDate();
+                  var myHour = time.getHours();
+                  var myMinute = time.getMinutes();
+                  var muSecond = time.getSeconds();
+                  if(myMonth < 10){
+                      myMonth = "0" + myMonth;
+                  }
+                  document.getElementById("yue_fen").innerHTML =  myYear + "." + myMonth + "." + myDay;
+                  document.getElementById("day_day").innerHTML =  myHour + ":" + myMinute + ":" + muSecond;
+              }
+            /**退出系统**/
+            function logout(){
+                if(confirm("您确定要退出本系统吗？")){
+                    window.location.href = "/login";
+                }
+            }
+            function bigImg(x){
+                x.style.height="300px";
+                x.style.width="300px";
+             }
+
+            function normalImg(x)	{
+                x.style.height="210px";
+                x.style.width="210px";
+            }
+     </script>
+    </head>
+    <body onload="getDate01()">
+        <!--导航栏-->
+        <div id="top">
+            <div id="top_logo">
+                <img alt="logo" src="homepage/image/title.png" width="274" height="49" style="vertical-align:middle;">
+            </div>
+            <div id="top_links">
+                <div id="top_op">
+                    <ul>
+                        <li>
+                            <img alt="当前用户" src="homepage/image/user.jpg">：
+                            <span>{{username}}</span>
+                        </li>
+                        <li>
+                            <img alt="事务月份" src="homepage/image/month.jpg">：
+                            <span id="yue_fen"></span>
+                        </li>
+                        <li>
+                            <img alt="今天是" src="homepage/image/date.jpg">：
+                            <span id="day_day"></span>
+                        </li>
+                    </ul> 
+                </div>
+                <div id="top_close">
+                    <a href="javascript:void(0);" onclick="logout();" target="_parent">
+                        <img alt="退出系统" title="退出系统" src="homepage/image/close.jpg" style="position: relative; top: 10px; left: 25px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="body_btn">
+            <div id="show_btn">
+				  <form method="get" action="display">
+					<input type="image" src="homepage/image/show.png" onmousemove="bigImg(this)" onmouseout="normalImg(this)"  alt="进入审阅界面" title="进入审阅界面"/>
+				  </form>
+            </div>
+			{{system_btn}}
+        </div>
+        <h6 id="body_text">
+            <p class="desc">
+                It <span>can mainly record all operations on the database, including login, connection, addition, deletion, modification and query of tables, </span>so as to facilitate responsibility tracing.
+             </p>
+            <p class="desc">
+                它<span>主要记录数据库上的所有操作，包括表的登录、连接、添加、删除、修改、查询等，</span>便于责任追溯。
+             </p>
+        </h6>
+        <div id="footer" style="text-align:center">
+            Copyright © 2020. <a href="http://www.sust.edu.cn/" target="_blank" title="陕西科技大学">陕西科技大学毕业设计</a>  - Collect from <a href="http://www.lgcheng.xyz" target="_blank" title="主页">lengguocheng</a>
+        </div>
+    </body>
+</html>

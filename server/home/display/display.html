@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>MySQL数据库审计系统</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="/display/image/icon.png">
+
+        <link href="./display/css/page_table.css" rel="stylesheet">
+        <link href="./display/css/page_top.css" rel="stylesheet">
+
+        <!--脚本-->
+        <script type="text/javascript">
+            /**退出系统**/
+            function logout(){
+                if(confirm("您确定要退出本系统吗？")){
+                    window.location.href = "login.html";
+                }
+            }
+            
+            /**获得当前日期**/
+            function  getDate01(){
+                var time = new Date();
+                var myYear = time.getFullYear();
+                var myMonth = time.getMonth()+1;
+                var myDay = time.getDate();
+                var myHour = time.getHours();
+                var myMinute = time.getMinutes();
+                var muSecond = time.getSeconds();
+                if(myMonth < 10){
+                    myMonth = "0" + myMonth;
+                }
+                document.getElementById("yue_fen").innerHTML =  myYear + "." + myMonth + "." + myDay;
+                document.getElementById("day_day").innerHTML =  myHour + ":" + myMinute + ":" + muSecond;
+            }
+			function timeonSearch(obj){
+			     setTimeout(function(){
+			       var storeId = document.getElementById('store');
+			       var rowsLength = storeId.rows.length;
+			       var key = obj.value;
+			       var searchCol = 1;
+			       for(var i=1;i<rowsLength;i++){
+			         var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+			         if(searchText.match(key)){
+			           storeId.rows[i].style.display='';
+			         }else{
+			           storeId.rows[i].style.display='none';
+			         }
+			       }
+			     },200);//200为延时时间
+			   }
+			 function addronSearch(obj){
+				   setTimeout(function(){
+				      var storeId = document.getElementById('store');
+				      var rowsLength = storeId.rows.length;
+				      var key = obj.value;
+				      var searchCol = 2;
+				      for(var i=1;i<rowsLength;i++){
+				        var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+				        if(searchText.match(key)){
+				          storeId.rows[i].style.display='';//显示行操作，
+				        }else{
+				          storeId.rows[i].style.display='none';//隐藏行操作
+				        }
+				      }
+				    },200);//200为延时时间
+				  }
+				function useronSearch(obj){
+					   setTimeout(function(){
+					     var storeId = document.getElementById('store');
+					     var rowsLength = storeId.rows.length;
+					     var key = obj.value;
+					     var searchCol = 3;
+					     for(var i=1;i<rowsLength;i++){
+					       var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+					       if(searchText.match(key)){
+					         storeId.rows[i].style.display='';
+					       }else{
+					         storeId.rows[i].style.display='none';//隐藏行操作
+					       }
+					     }
+					   },200);//200为延时时间
+					 }
+				function typeonSearch(obj){
+						  setTimeout(function(){
+						    var storeId = document.getElementById('store');
+						    var rowsLength = storeId.rows.length;
+						    var key = obj.value;
+						    var searchCol = 4;
+						    for(var i=1;i<rowsLength;i++){
+						      var searchText = storeId.rows[i].cells[searchCol].innerHTML;
+						      if(searchText.match(key)){
+						        storeId.rows[i].style.display='';
+						      }else{
+						        storeId.rows[i].style.display='none';//隐藏行操作
+						      }
+						    }
+						  },200);//200为延时时间
+						}
+            </script>
+    </head>
+    <body onload="getDate01()">
+        <!--导航栏-->
+        <div id="top">
+            <div id="top_logo">
+                <img alt="logo" src="./display/image/title.png" width="274" height="49" style="vertical-align:middle;">
+            </div>
+            <div id="top_links">
+                <div id="top_op">
+                    <ul>
+                        <li>
+                            <img alt="当前用户" src="./display/image/user.jpg">：
+                            <span>{{username}}</span>
+                        </li>
+                        <li>
+                            <img alt="事务月份" src="./display/image/month.jpg">：
+                            <span id="yue_fen"></span>
+                        </li>
+                        <li>
+                            <img alt="今天是" src="./display/image/date.jpg">：
+                            <span id="day_day"></span>
+                        </li>
+                    </ul> 
+                </div>
+                <div id="top_close">
+                    <a href="javascript:void(0);" onclick="logout();" target="_parent">
+                        <img alt="退出系统" title="退出系统" src="./display/image/close.jpg" style="position: relative; top: 10px; left: 25px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--表格数据-->
+        <div class="card">
+              <div class="card-body">
+                    <h4 class="card-title">审计结果展示</h4>
+                    <h6 class="card-subtitle">It <code>can mainly record all operations on the database, including login, connection, addition, deletion, modification and query of tables,</code>  so as to facilitate responsibility tracing.</h6>
+					<div > 
+							按时间过滤：<input name="key" type="text" id="key" onkeydown="timeonSearch(this)" value="" />
+							按地址过滤：<input name="key" type="text" id="key" onkeydown="addronSearch(this)" value="" />
+							按用户过滤：<input name="key" type="text" id="key" onkeydown="useronSearch(this)" value="" />
+							按命令过滤：<input name="key" type="text" id="key" onkeydown="typeonSearch(this)" value="" />
+					</div>
+                    <div class="table-responsive-sm">
+						{{#TABLE1}}
+                        <table class="table" id="store">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">操作时间</th>
+                                    <th scope="col">操作来源</th>
+                                    <th scope="col">操作用户</th>
+                                    <th scope="col">操作类型</th>
+									<th scope="col">操作描述</th>
+                                    <th scope="col">操作详情</th>
+                                </tr>
+							{{#TABLE_BADY}}
+                                <tr>
+                                    <td scope="row">{{id}}</td>
+                                    <td>{{op_time}}</td>
+                                    <td>{{op_src}}</td>
+                                    <td>{{op_user}}</td>
+                                    <td>{{op_type}}</td>
+                                    <td>{{op_desc}}</td>
+									<td>{{op_deta}}</td>
+                                </tr>
+							{{/TABLE_BADY}}
+						</table>
+                        {{/TABLE1}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

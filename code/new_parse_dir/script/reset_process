@@ -1,0 +1,9 @@
+#!/bin/bash
+PID=$(ps -e|grep parsedata | awk '{printf $1}')
+if [ -z "$PID" ]; then
+sudo /home/top-down/workspace/MySqlAduitSystem/code/new_parse_dir/parsedata
+else
+kill -9 ${PID}
+sudo /home/top-down/workspace/MySqlAduitSystem/code/new_parse_dir/parsedata
+fi
+echo "reset OK"

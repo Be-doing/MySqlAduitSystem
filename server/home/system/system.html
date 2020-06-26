@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>系统管理</title>
+	<link rel="stylesheet" href="system/css/style.css">
+	<link rel="stylesheet" href="system/css/min.css">
+	
+	<script src="system/js/check.js" ></script>
+  </head>
+  
+  <body> 
+  <table border=0><tr><th ><img src="system/image/title.png"></th></tr></table>
+     <h1>策略规则</h1>
+		<table border=0 width=100% >
+				<tr>
+					<th height=30><font  size='3'>规则名称</th>
+					<th height=30><font  size='3'>初始条件</th>
+					<th height=30><font  size='3'>结束条件</th>
+					<th height=30><font  size='3'>备注</th>
+				</tr>
+				<tr>
+					<th height=20><font  size='2'>时间规则</th>
+					<th height=20><font  size='2'>{{start_time}}</th>
+					<th height=20><font  size='2'>{{end_time}}</th>
+					<th height=20><font  size='2'>{{week}}</th>
+				</tr>
+				<tr>
+					<th height=20><font  size='2'>地址规则</th>
+					<th height=20><font  size='2'>{{start_addr}}</th>
+					<th height=20><font  size='2'>{{end_addr}}</th>
+					<th height=20><font  size='2'>NULL</th>
+				</tr>
+		</table>
+	</table>
+	<div id="ruler_table">
+		<p class="desc">若要修改规则，请提交<span>按照格式</span>修改所有内容，且<span>重启设备.</span></p>
+		<form method="post"  action="system">
+			<p>
+			   开始时间
+			      <input type="text" name="start_time" placeholder="00:00:00" onblur="checkTime(this.value)"></p>
+			<p>
+			  结束时间
+			     <input type="text" name="end_time" placeholder="00:00:00" onblur="checkTime(this.value)"></p>
+			  <p>
+			<p>
+			   开始日期
+			      <input type="text" name="start_date" placeholder="01-01" onblur="checkDate(this.value)"></p>
+			<p>
+			  结束日期
+			     <input type="text" name="end_date" placeholder="12-31" onblur="checkDate(this.value)"></p>
+			  <p>
+				星期<select name="week"">
+				   <option>Monday
+				   <option>Tuesday 
+				   <option>Wednesday
+				   <option>Thursday
+				   <option>Friday
+				   <option>Saturday
+				   <option>Sunday
+				   <option selected>NULL
+				   </select>
+				</p>
+				<p>
+					<lable for="text">开始地址</label>
+					   <input type="text" name="start_addr" placeholder="0.0.0.0" onblur="checkIP(this.value)"></p>
+				 <p>
+				   <lable for="text">结束地址</label>
+				      <input type="text" name="end_addr" placeholder="255.255.255.255" onblur="checkIP(this.value)"></p>
+
+			<input type="submit" value="提交" onclick="return lastalert()">
+			 <input type="reset" value="清空"></p>
+		 </form>
+	</div>
+
+	<h1 id="htwo">设备管理</h1>
+		<div class="submit_button">
+			<form  action="op_reset" method="get">
+				<button type="submit" id="submit_button1">重启设备</button>
+			</form>
+			<form  action="op_open" method="get">
+				<button type="submit" id="submit_button2">开启设备</button>
+			</form>
+			<form  action="op_close" method="get">
+				<button type="submit" id="submit_button3">关闭设备</button>
+			</form>
+		</div>
+  </body>
+  
+ </html>
