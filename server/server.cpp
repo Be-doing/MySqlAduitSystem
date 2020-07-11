@@ -11,7 +11,7 @@
 #define SYSTEM_ADDR "192.168.47.129:10000/login"
 
 /*策略*/
-string start_time,start_addr,end_time,end_addr,week;
+string start_time,start_addr,start_date,end_date,end_time,end_addr,week;
 void SpiltStrng(const string& src, string& str1, string& str2) {
 	size_t pre = src.find('~',0);
 	str1=src.substr(0,pre);
@@ -26,14 +26,14 @@ void InitRuler(){
 		while(getline(file,flag)){
 			if(ok) {
 				if(line == 0) {
-					SpiltStrng(flag,start_time,end_time);
+					SpiltStrng(flag,start_date,end_date);
 				} else if (line == 1) {
 					string left, right;
-					SpiltStrng(flag,left,right);
-					start_time += " ";
-					start_time += left;
-					end_time += " ";
-					end_time += right;
+					SpiltStrng(flag,start_time,end_time);
+					start_date += " ";
+					start_date += start_time;
+					end_date += " ";
+					end_date += end_time;
 				} else if(line == 2) {
 					week = flag;
 				} else {
@@ -47,6 +47,9 @@ void InitRuler(){
 			}
 		}
 	}
+	cout << start_date << "----" << end_date << endl;
+	cout << start_addr << "----" << end_addr << endl;
+	cout << week << endl;
 	cout << "InitRuler successful" << endl;
 	file.close();
 }
@@ -128,6 +131,7 @@ void GetLoginPage(const hb::Request& req, hb::Response& res) {
 }
 
 void GetRegistrationPage(const hb::Request& req, hb::Response& res) {
+	cout << "GetRegistrationPage" << endl;
 	string body;
 	string tmp;
 	ifstream file("./home/register/register.html");
@@ -141,7 +145,6 @@ void OPReset(const hb::Request& req, hb::Response& res) {
 	cout << "OPReset" << endl;
 	InitRuler();
 	parseOBJ.RESET();
-	cout << "????" << endl;
 	GetLoginPage(req,res);
 }
 
@@ -166,11 +169,9 @@ void LoginAction(const hb::Request& req, hb::Response& res) {
 	if(user_type == NORMAL_USER) {
 		mas.HomePageRun(false,result,username);
 		res.set_content(result,"text/html");
-		cout << "NORMAL_USER" << endl;
 	} else if (user_type == VIP_USER) {
 		mas.HomePageRun(true,result,username);
 		res.set_content(result,"text/html");
-		cout << "VIP_USER" << endl;
 	} else if(user_type == ERROR_PWD) {
 		string str="<!DOCTYPE html>\
 		<html>\
@@ -230,7 +231,7 @@ void GetTablePage(const hb::Request& req, hb::Response& res) {
 
 void GetSystemPage(const hb::Request& req, hb::Response& res) {
 	string body;
-	mas.SystemPageRun(start_time,end_time,start_addr,end_addr,week,body);
+	mas.SystemPageRun(start_date,end_date,start_addr,end_addr,week,body);
 	res.set_content(body,"text/html");
 }
 
@@ -244,25 +245,67 @@ void ChangeRuler (const hb::Request& req, hb::Response& res) {
 	ifile.close();
 	ofstream file("../code/new_parse_dir/policyrules.config");
 	if(file.is_open()) {
-		string time,date,addr,week;
-		time += req.get_param_value("start_time");
+		string time,date,addr,weeks,tmp;
+		tmp = req.get_param_value("start_time");
+		if(tmp.size() == 0) {
+			time += start_time;
+		} else {
+			time += tmp;
+		}
+		//time += req.get_param_value("start_time");
 		time += "~";
-		time += req.get_param_value("end_time");
-		week = req.get_param_value("week");
-		date += req.get_param_value("start_date");
-		date +="~";
-		date += req.get_param_value("end_date");
-		addr += req.get_param_value("start_addr");
+		tmp = req.get_param_value("end_time");
+		if(tmp.size() == 0) {
+			time += end_time;
+		} else {
+			time += tmp;
+		}
+		
+
+		tmp = req.get_param_value("start_date");
+		if(tmp.size() == 0) {
+			date += start_date;
+		} else {
+			date += tmp;
+		}
+		date += "~";
+		tmp = req.get_param_value("end_date");
+		if(tmp.size() == 0) {
+			date += end_date;
+		} else {
+			date += tmp;
+		}
+
+
+		tmp = req.get_param_value("week");
+		if(tmp.size() == 0) {
+			weeks = week;
+		} else {
+			weeks = tmp;
+		}
+		
+		tmp = req.get_param_value("start_addr");
+		if(tmp.size() == 0) {
+			addr += start_addr;
+		} else {
+			addr += tmp;
+		}
 		addr += "~";
-		addr += req.get_param_value("end_addr");
+		tmp = req.get_param_value("end_addr");
+		if(tmp.size() == 0) {
+			addr += end_addr;
+		} else {
+			addr += tmp;
+		}
 		tmpv[11]=date;
 		tmpv[12]=time;
-		tmpv[13]=week;
+		tmpv[13]=weeks;
 		tmpv[14]=addr;
 		for(const auto& e : tmpv) {
 			file << e << endl;
 		}
 		file.close();
+		InitRuler();
 		GetSystemPage(req,res);
 	}
 }
@@ -274,16 +317,17 @@ int main()
 	srv.set_base_dir(BASE_PATH);
 	mas.InitSystem();
 	InitRuler();
-	cout << start_time << "----" << end_time << endl;
-	cout << start_addr << "----" << end_addr << endl;
-	cout << week << endl;
+	parseOBJ.START();
+
 	srv.Get("/login",GetLoginPage);
+	srv.Post("/go_homepage",LoginAction);
 	srv.Get("/op_reset",OPReset);
 	srv.Get("/op_open",OPOn);
 	srv.Get("/op_close",OPOff);
 	srv.Get("/system",GetSystemPage);
 	srv.Get("/display",GetTablePage);
-	srv.Post("/go_homepage",LoginAction);
+	srv.Get("/go_registerPage",GetRegistrationPage);
+
 	srv.Post("/login",RegistrationAction);
 	srv.Post("/system",ChangeRuler);
 	srv.listen("192.168.47.129",10000);

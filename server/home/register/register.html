@@ -16,7 +16,7 @@
 				return false;
 			}
 			else { //输入正确时   
-                alert("注册成功！"); 
+				alert("注册成功！");
             } 
         } 
         </script> 
@@ -40,7 +40,7 @@
 <form action="login" method="post">
 <table border=0 height=400 >
 <tr><th height=65><font  size='4'>用 户 名</th><th><input type="text" style="height:40px" placeholder="请输入用户名" size=40 name="username"></th></tr>
-<tr><th height=65><font  size='4'>密    码</th><th><input type="password" style="height:40px" placeholder="密码长度为6~18字符" size=40 id="password"></th></tr>
+<tr><th height=65><font  size='4'>密    码</th><th><input type="password" style="height:40px" placeholder="密码长度为6~18字符" size=40 name="password" id="password"></th></tr>
 <tr><th height=65><font  size='4'>确认密码</th><th><input type="password" style="height:40px" placeholder="请重新输入密码" size=40 id="password1"></th></tr>
 <tr><th height=65><font  size='4'>密    钥</th><th><input type="text" style="height:40px" placeholder="若注册管理账号请输入密钥，否则不输入" size=40 name="secretkey"></th></tr>
 <tr><th colspan=2 height=65><input type='submit' style="background-color:red;height:55px;width:160px;font-size:25px;color:white;border:none" value='注册'id='l' onclick = "validate()" ></th></tr>
